@@ -12,7 +12,7 @@ jobs:
       - uses: docker/build-push-action@v1
         with:
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
           registry: docker.pkg.github.com
           repository: trailmix/dnsmasqpxe/latest
           dockerfile: .docker/Dockerfile
