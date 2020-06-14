@@ -1,5 +1,5 @@
 build:
-	docker build --no-cache -t dnsmasqpxe .docker
+	docker build --no-cache -t dnsmasqpxe -f .docker/Dockerfile .
 run:
 	docker container run \
 		-d \

@@ -19,7 +19,7 @@ VOLUME /etc/dnsmasq.d
 EXPOSE 53 53/udp
 
 # copy over entrypoint
-COPY entrypoint.sh /sbin/entrypoint.sh
+COPY .docker/entrypoint.sh /sbin/entrypoint.sh
 
 RUN chmod 755 /sbin/entrypoint.sh
 ENTRYPOINT ["/bin/bash", "/sbin/entrypoint.sh"]

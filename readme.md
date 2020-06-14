@@ -178,7 +178,7 @@ Then evaluate these commands and the expressions below:
 
 ```bash
 # build container
-docker build --no-cache -t dnsmasqpxe .docker
+docker build --no-cache -t dnsmasqpxe -f .docker/Dockerfile .
 # run container
 docker run -d -v ${PWD}/config/:/etc/dnsmasq.d/ -v ${PWD}/templates/:/tmp/templates/ --name dnsmasqpxe dnsmasqpxe
 # test if a normal alpine can do what we want to accomplish
