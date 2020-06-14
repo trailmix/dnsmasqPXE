@@ -1,4 +1,8 @@
 # build container
+# test to ensure you can hit the dns server on a specific port
+# test to ensure you can get dhcp from another container on the same network
+# test to ensure you can receive a file from another container on the same network
+
 name: Push to release branches
 on:
   push:
@@ -9,11 +13,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # simple test
+      - run: |
+          make test.dnsmasqpxe
+      # push to docker prime
       - uses: docker/build-push-action@v1
+        if: success()
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_TOKEN_TRILOM }}
+          repository: trailmix/dnsmasqpxe
+          dockerfile: .docker/Dockerfile
+          tag_with_ref: true
+      # push to github package repo
+      - uses: docker/build-push-action@v1
+        if: success()
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
           registry: docker.pkg.github.com
-          repository: trailmix/dnsmasqpxe/latest
+          repository: trailmix/dnsmasqpxe
           dockerfile: .docker/Dockerfile
           tag_with_ref: true

@@ -1,0 +1,32 @@
+version: "3"
+services:
+  dns:
+    restart: always
+    build:
+      context: ../../.
+      dockerfile: .docker/Dockerfile
+    volumes:
+      # mount config dir so that the config that is generated is transparent
+      # you should also be able to put files here for additional explicit config
+      - ./config:/etc/dnsmasq.d
+      # put the tftp root here and match it to the tftp root in the config.yml
+      # that way you can manage the tftp root from the host
+      - ./tftp:/srv/tftp
+      - ./templates:/tmp/templates
+      - ./config.yml:/tmp/config.yml
+    environment:
+      HOST_IP: "10.0.15.15"
+      DNS1: "8.8.4.4"
+      DNS2: "1.1.1.1"
+      INTERFACE: eth0
+      # consul
+      REV_CIDR: "10.0.0.0/8"
+      # optional
+      # DHCP defaults to false
+      DHCP: "true"
+      TFTP: "true"
+    # foward host port 1000 to port 53 on container
+    ports:
+      - "1000:53/udp"
+    cap_add:
+      - NET_ADMIN

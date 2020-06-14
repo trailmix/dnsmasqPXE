@@ -23,30 +23,32 @@ if [[ $DCHP == true ]]; then
 fi
 
 # for each file in templates
-for file in /tmp/templates/*.conf; do
-    echo "$file"
-    FILE_NAME=`basename $file`
-    cat $file > /etc/dnsmasq.d/$FILE_NAME
-    echo "" >> /etc/dnsmasq.d/$FILE_NAME
-    # find and replace words
-    sed -i "s|INTERFACE|$INTERFACE|g" /etc/dnsmasq.d/`basename $file`
-    sed -i "s|HOST_IP|$HOST_IP|g" /etc/dnsmasq.d/`basename $file`
-    sed -i "s|DNS1|$DNS1|g" /etc/dnsmasq.d/`basename $file`
-    sed -i "s|DNS2|$DNS2|g" /etc/dnsmasq.d/`basename $file`
-    sed -i "s|REV_CIDR|$REV_CIDR|g" /etc/dnsmasq.d/`basename $file`
-    if [[ $TFTP == true ]]; then
-        TFTP_ROOT=`yq r /tmp/config.yml tftp.root`
-        DOMAIN=`yq r /tmp/config.yml tftp.domain`
-        TFTP_HOST=`yq r /tmp/config.yml tftp.host`
-        RANGE_LOW=`yq r /tmp/config.yml tftp.range[0]`
-        RANGE_HIGH=`yq r /tmp/config.yml tftp.range[1]`
-        sed -i "s|TFTP_ROOT|$TFTP_ROOT|g" /etc/dnsmasq.d/`basename $file`
-        sed -i "s|DOMAIN|$DOMAIN|g" /etc/dnsmasq.d/`basename $file`
-        sed -i "s|TFTP_HOST|$TFTP_HOST|g" /etc/dnsmasq.d/`basename $file`
-        sed -i "s|RANGE_LOW|$RANGE_LOW|g" /etc/dnsmasq.d/`basename $file`
-        sed -i "s|RANGE_HIGH|$RANGE_HIGH|g" /etc/dnsmasq.d/`basename $file`
-        sed -i "s|TFTP_ROOT|$TFTP_ROOT|g" /etc/dnsmasq.d/`basename $file`
-    fi
-done
+if [[ `ls -A /tmp/templates` ]]; then
+    for file in /tmp/templates/*.conf; do
+        echo "$file"
+        FILE_NAME=`basename $file`
+        cat $file > /etc/dnsmasq.d/$FILE_NAME
+        echo "" >> /etc/dnsmasq.d/$FILE_NAME
+        # find and replace words
+        sed -i "s|INTERFACE|$INTERFACE|g" /etc/dnsmasq.d/`basename $file`
+        sed -i "s|HOST_IP|$HOST_IP|g" /etc/dnsmasq.d/`basename $file`
+        sed -i "s|DNS1|$DNS1|g" /etc/dnsmasq.d/`basename $file`
+        sed -i "s|DNS2|$DNS2|g" /etc/dnsmasq.d/`basename $file`
+        sed -i "s|REV_CIDR|$REV_CIDR|g" /etc/dnsmasq.d/`basename $file`
+        if [[ $TFTP == true ]]; then
+            TFTP_ROOT=`yq r /tmp/config.yml tftp.root`
+            DOMAIN=`yq r /tmp/config.yml tftp.domain`
+            TFTP_HOST=`yq r /tmp/config.yml tftp.host`
+            RANGE_LOW=`yq r /tmp/config.yml tftp.range[0]`
+            RANGE_HIGH=`yq r /tmp/config.yml tftp.range[1]`
+            sed -i "s|TFTP_ROOT|$TFTP_ROOT|g" /etc/dnsmasq.d/`basename $file`
+            sed -i "s|DOMAIN|$DOMAIN|g" /etc/dnsmasq.d/`basename $file`
+            sed -i "s|TFTP_HOST|$TFTP_HOST|g" /etc/dnsmasq.d/`basename $file`
+            sed -i "s|RANGE_LOW|$RANGE_LOW|g" /etc/dnsmasq.d/`basename $file`
+            sed -i "s|RANGE_HIGH|$RANGE_HIGH|g" /etc/dnsmasq.d/`basename $file`
+            sed -i "s|TFTP_ROOT|$TFTP_ROOT|g" /etc/dnsmasq.d/`basename $file`
+        fi
+    done
+fi
 
 dnsmasq -k $@

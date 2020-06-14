@@ -14,23 +14,12 @@ The simplest configuration is below. This will set up dnsmasq on localhost, and 
 version: "3"
 services:
   dns:
-    image: trilom/dnsmasqPXE
+    image: trailmix/dnsmasqPXE
     restart: always
     ports:
       - "53:53/udp"
     cap_add:
       - NET_ADMIN
-```
-
-> templates/5-host.conf
-
-```config
-no-poll
-no-resolv
-listen-address=::1,127.0.0.1,HOST_IP
-interface=INTERFACE
-server=DNS1
-server=DNS2
 ```
 
 The expansive way to configure is below, this will configure the guest IP address, DNS servers, and interface.  
@@ -51,7 +40,9 @@ services:
     restart: always
     volumes:
       - ./config:/etc/dnsmasq.d
+      - ./templates:/tmp/templates
       - ./tftp:/srv/tftp
+      - ./config.yml:/tmp/config.yml
     environment:
       HOST_IP: "10.0.15.100"
       DNS1: "1.1.1.1"
@@ -96,17 +87,6 @@ dhcp:
       - name: lust
         address: 10.0.15.13
         mac: ab:cd:ef:12:34:56
-```
-
-> templates/5-host.conf
-
-```config
-no-poll
-no-resolv
-listen-address=::1,127.0.0.1,HOST_IP
-interface=INTERFACE
-server=DNS1
-server=DNS2
 ```
 
 > templates/10-consul.conf

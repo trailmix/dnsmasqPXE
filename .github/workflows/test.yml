@@ -1,4 +1,0 @@
-# build container
-# test to ensure you can hit the dns server on a specific port
-# test to ensure you can get dhcp from another container on the same network
-# test to ensure you can receive a file from another container on the same network

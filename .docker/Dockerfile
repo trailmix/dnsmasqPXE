@@ -20,6 +20,7 @@ EXPOSE 53 53/udp
 
 # copy over entrypoint
 COPY .docker/entrypoint.sh /sbin/entrypoint.sh
+COPY templates/ /tmp/templates
 
 RUN chmod 755 /sbin/entrypoint.sh
 ENTRYPOINT ["/bin/bash", "/sbin/entrypoint.sh"]

@@ -1,0 +1,11 @@
+version: "3"
+services:
+  dns:
+    build:
+      context: ../../.
+      dockerfile: .docker/Dockerfile
+    restart: always
+    ports:
+      - "53:53/udp"
+    cap_add:
+      - NET_ADMIN
