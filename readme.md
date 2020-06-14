@@ -1,10 +1,10 @@
-# how to
+# dnsmasqPXE
 
-## use
+![goofus_masqs goofus dnsmasq pxe init matchbox](static/goofus_masqs.png)
 
-[See configure section](#configure) on configuring, then run `make build` to start or `make clean` to stop.
+## use - docker-compose
 
-## configure
+### configure
 
 The simplest configuration is below. This will set up dnsmasq on localhost, and point all localhost DNS queries to itself with `1.1.1.1` and `8.8.8.8` as the DNS servers.
 
@@ -66,7 +66,7 @@ services:
       - NET_ADMIN
 ```
 
-> addresses.yml
+> config.yml
 
 ```yaml
 tftp:
@@ -151,7 +151,7 @@ The config directory is used to view current running config and make on the fly 
 
 ## ./tftp
 
-You can put files here, and in the **addresses.yml** set the tftp options. Be sure that you mount the volume `-v ${PWD}/tftp:/srv/tftp` or `./tftp:/srv/tftp` in compose, and that this volume matches the `tftp.root` key in **addresses.yml**
+You can put files here, and in the **config.yml** set the tftp options. Be sure that you mount the volume `-v ${PWD}/tftp:/srv/tftp` or `./tftp:/srv/tftp` in compose, and that this volume matches the `tftp.root` key in **config.yml**
 
 ```yaml
 tftp:
@@ -163,6 +163,34 @@ tftp:
   root: /srv/tftp
 ```
 
-## alterations
+## use - docker commands
+
+[See configure section](#configure) on configuring.  
+Then evaluate these commands and the expressions below:
+
+- `make build` - build container
+- `make run` - run the container detached
+- `make exec` - enter(👀) the container
+- `make test.alpine` - run an alpine container as a control to see if it can do what we want it to do (`dig @127.0.0.1 google.com` - provide dns from localhost)
+- `make test.dnsmasqpxe` - run our container to see if it can do what we want it to do (`dig @127.0.0.1 google.com` - provide dns from localhost)
+- `make test` - do both the tests and clean up after
+- `make clean` - stop and remove containers
+
+```bash
+# build container
+docker build --no-cache -t dnsmasqpxe .docker
+# run container
+docker run -d -v ${PWD}/config/:/etc/dnsmasq.d/ -v ${PWD}/templates/:/tmp/templates/ --name dnsmasqpxe dnsmasqpxe
+# test if a normal alpine can do what we want to accomplish
+# (hint: it should time out)
+docker container run alpine /bin/ash -c "apk add bind-tools && dig -p 53 @127.0.0.1 google.com"
+# test if we can do it with our container
+# (hint: should be a #successbaby.gif)
+docker container run -d -v ${PWD}/config/:/etc/dnsmasq.d/ -v ${PWD}/templates/:/tmp/templates/ --name dnsmasqpxe trailmix/dnsmasqpxe && docker exec -it dnsmasqpxe /bin/ash -c "apk add bind-tools && dig -p 53 @127.0.0.1 google.com"
+# enter the container (👀)
+docker exec -it dnsmasqpxe /bin/bash
+```
+
+## port alterations
 
 - you can alter the port, for example `1000:53/udp` will make the host listen on port 1000 and forward it to 53 on the container.

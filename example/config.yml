@@ -1,0 +1,27 @@
+tftp:
+  range:
+    - 10.0.15.20
+    - 10.0.15.200
+  host: 10.0.15.10
+  domain: 7ds.xyz
+  root: /srv/tftp
+dhcp:
+  - name: mgmt
+    reverse: 10.0.0.0/8
+    range:
+      - 10.0.15.20
+      - 10.0.15.200
+    router: 10.0.15.1
+    hosts:
+      - name: greed
+        address: 10.0.15.10
+        mac: ab:cd:ef:12:34:56
+      - name: wrath
+        address: 10.0.15.11
+        mac: ab:cd:ef:12:34:55
+      - name: pride
+        address: 10.0.15.12
+        mac: ab:cd:ef:12:34:54
+      - name: lust
+        address: 10.0.15.13
+        mac: ab:cd:ef:12:34:56

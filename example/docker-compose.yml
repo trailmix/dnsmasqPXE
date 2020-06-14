@@ -1,0 +1,25 @@
+version: "3"
+services:
+  dns:
+    build:
+      context: trailmix/dnsmasqpxe
+    restart: always
+    volumes:
+      - ./config:/etc/dnsmasq.d
+      - ./config.yml:/tmp/config.yml
+      - ./tftp:/srv/tftp
+      - ./templates:/tmp/templates
+    environment:
+      HOST_IP: "10.0.15.100" # your ip, or whatever your network needs
+      DNS1: "1.1.1.1"
+      DNS2: "8.8.8.8"
+      INTERFACE: eth0 # interface name
+      # not necessary
+      REV_CIDR: "10.0.0.0/8"
+      # default to false
+      DHCP: "true" # enables dhcp server, must provide templates
+      TFTP: "true" # enables dhcp, must provide template and config in config.yml
+    ports:
+      - "1000:53/udp"
+    cap_add:
+      - NET_ADMIN
