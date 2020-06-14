@@ -21,9 +21,8 @@ test.dnsmasqpxe:
 		--name dnsmasqpxe \
 		dnsmasqpxe && \
 	docker exec \
-		-it \
 		dnsmasqpxe \
 		/bin/ash \
 		-c "apk add bind-tools && dig -p 53 @127.0.0.1 google.com"
 clean:
-	docker stop dnsmasqpxe && docker rm dnsmasqpxe
+	docker stop dnsmasqpxe && docker rm dnsmasqpxe && docker image rm dnsmasqpxe
