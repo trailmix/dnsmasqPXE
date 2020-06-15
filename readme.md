@@ -1,6 +1,8 @@
 # dnsmasqPXE
 
-![Supports amd64 Architecture][amd64-shield]![Supports armhf Architecture][armhf-shield]![Supports armv7 Architecture][armv7-shield]![Supports aarch64 Architecture][aarch64-shield]  
+![Supports amd64 Architecture][amd64-shield]![Supports armhf Architecture][armhf-shield]![Supports armv7 Architecture][armv7-shield]![Supports aarch64 Architecture][aarch64-shield]
+![Docker Pulls][docker-pulls]![Docker Size][docker-size][![Docker Version][docker-version]](https://hub.docker.com/r/trailmix/dnsmasqpxe/tags)[![Docker Edge][docker-edge]](https://hub.docker.com/r/trailmix/dnsmasqpxe/tags)
+
 [![goofus_masqs goofus dnsmasq pxe init matchbox](static/goofus_masqs.png)](http://djkittyplayz.art/)
 [![art djkittyplayz][art]](<(http://djkittyplayz.art/)>)
 
@@ -182,3 +184,7 @@ docker exec -it dnsmasqpxe /bin/bash
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
 [armhf-shield]: https://img.shields.io/badge/armhf-yes-green.svg
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
+[docker-pulls]: https://img.shields.io/docker/pulls/trailmix/dnsmasqpxe
+[docker-size]: https://img.shields.io/docker/image-size/trailmix/dnsmasqpxe?sort=semver
+[docker-version]: https://img.shields.io/docker/v/trailmix/dnsmasqpxe?sort=semver&label=latest
+[docker-edge]: https://img.shields.io/docker/v/trailmix/dnsmasqpxe/edge?label=edge
