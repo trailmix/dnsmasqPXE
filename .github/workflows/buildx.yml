@@ -58,13 +58,13 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN_TRILOM }}
         run: |
           echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
-      # - name: Docker Login - Github
-      #   if: success() && github.event_name != 'pull_request'
-      #   env:
-      #     DOCKER_USERNAME: "trilom-bot"
-      #     GITHUB_REGISTRY_PW: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
-      #   run: |
-      #     echo "${GITHUB_REGISTRY_PW}" | docker login https://${GITHUB_REGISTRY} --username "${DOCKER_USERNAME}" --password-stdin
+      - name: Docker Login - Github
+        if: success() && github.event_name != 'pull_request'
+        env:
+          DOCKER_USERNAME: "trilom-bot"
+          GITHUB_REGISTRY_PW: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
+        run: |
+          echo "${GITHUB_REGISTRY_PW}" | docker login https://${GITHUB_REGISTRY} --username ${DOCKER_USERNAME} --password-stdin
       - name: Docker Buildx (push) - Docker Prime
         if: success() && github.event_name != 'pull_request'
         run: |
