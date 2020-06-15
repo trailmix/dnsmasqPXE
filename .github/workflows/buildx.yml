@@ -64,7 +64,7 @@ jobs:
           DOCKER_USERNAME: "trilom-bot"
           DOCKER_PASSWORD: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
         run: |
-          echo "${GITHUB_TOKEN}" | docker login "https://${{ steps.prepare.outputs.gh_reg }}" -u ${DOCKER_USERNAME} --password-stdin
+          docker login "https://${{ steps.prepare.outputs.gh_reg }}" -u ${DOCKER_USERNAME} -p ${GITHUB_TOKEN}
       - name: Docker Buildx (push) - Docker Prime
         if: success() && github.event_name != 'pull_request'
         run: |
