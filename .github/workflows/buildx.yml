@@ -45,7 +45,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./.docker/Dockerfile ./
+            ${TAGS} ${GH_TAGS} --file ./.docker/Dockerfile ./
       - name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v3
       - name: Docker Buildx (build)
@@ -69,10 +69,10 @@ jobs:
         if: success() && github.event_name != 'pull_request'
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
-      - name: Docker Buildx (push) - Github
-        if: success() && github.event_name != 'pull_request'
-        run: |
-          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.gh_tags }}
+      # - name: Docker Buildx (push) - Github
+      #   if: success() && github.event_name != 'pull_request'
+      #   run: |
+      #     docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.gh_tags }}
       - name: Docker Check Manifest
         if: always() && github.event_name != 'pull_request'
         run: |
