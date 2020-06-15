@@ -48,6 +48,9 @@ jobs:
       - name: Docker Buildx (build)
         run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args }}
+      - name: test for runner (amd64)
+        run: |
+          make test.dnsmasqpxe CONTAINER="${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}"
       - name: Docker Login - Docker Prime
         if: success() && github.event_name != 'pull_request'
         env:

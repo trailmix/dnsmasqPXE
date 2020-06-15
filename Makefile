@@ -1,12 +1,16 @@
+ifndef CONTAINER
+CONTAINER=dnsmasqpxe
+endif
+
 build:
-	docker build --no-cache -t dnsmasqpxe -f .docker/Dockerfile .
+	docker build --no-cache -t $(CONTAINER) -f .docker/Dockerfile .
 run:
 	docker container run \
 		-d \
 		-v ${PWD}/config/:/etc/dnsmasq.d/ \
 		-v ${PWD}/templates/:/tmp/templates/ \
 		--name dnsmasqpxe \
-		dnsmasqpxe
+		$(CONTAINER)
 exec:
 	docker exec -it dnsmasqpxe /bin/bash
 test: test.alpine test.dnsmasqpxe clean
@@ -19,9 +23,9 @@ test.dnsmasqpxe:
 		-v ${PWD}/config/:/etc/dnsmasq.d/ \
 		-v ${PWD}/templates/:/tmp/templates/ \
 		--name dnsmasqpxe \
-		dnsmasqpxe && \
+		$(CONTAINER) && \
 	docker exec \
-		dnsmasqpxe \
+		$(CONTAINER) \
 		/bin/ash \
 		-c "apk add bind-tools && dig -p 53 @127.0.0.1 google.com"
 clean:
