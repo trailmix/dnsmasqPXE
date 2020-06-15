@@ -51,28 +51,27 @@ jobs:
       - name: Docker Buildx (build)
         run: |
           docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args }}
-      - name: Docker Login - Github
+      - name: Docker Login - Docker Prime
         if: success() && github.event_name != 'pull_request'
         env:
           DOCKER_USERNAME: ${{ github.actor }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN_TRILOM }}
         run: |
           echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
-      - name: Docker Login - Docker Prime
-        if: success()
+      - name: Docker Login - Github
+        if: success() && github.event_name != 'pull_request'
         env:
-          DOCKER_USERNAME: ${{ github.actor }}
           DOCKER_PASSWORD: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
         run: |
-          echo "${DOCKER_PASSWORD}" | docker login https://${GITHUB_REGISTRY} --username "${DOCKER_USERNAME}" --password-stdin
-      - name: Docker Buildx (push) - Github
-        if: success() && github.event_name != 'pull_request'
-        run: |
-          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.gh_tags }}
+          echo "${DOCKER_PASSWORD}" | docker login https://${GITHUB_REGISTRY} --password-stdin
       - name: Docker Buildx (push) - Docker Prime
         if: success() && github.event_name != 'pull_request'
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
+      - name: Docker Buildx (push) - Github
+        if: success() && github.event_name != 'pull_request'
+        run: |
+          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.gh_tags }}
       - name: Docker Check Manifest
         if: always() && github.event_name != 'pull_request'
         run: |
