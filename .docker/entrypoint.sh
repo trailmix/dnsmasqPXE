@@ -2,9 +2,11 @@
 # check if dhcp is enabled, if so build dhcp file
 echo $DHCP
 echo $TFTP
-if [[ $DCHP == true ]]; then
+[ "$DHCP" == "true" ] && (
     # for each dhcp server options
+    echo 'in dhcp'
     for row in $(yq r -j /tmp/config.yml 'dhcp.*.name'); do
+        echo "in $row"
         DHCP_NAME=`echo "$row" | tr -d '"'`
         REVERSE_CIDR=`yq r /tmp/config.yml dhcp.name==$DHCP_NAME.reverse`
         ROUTER=`yq r /tmp/config.yml dhcp.name==$DHCP_NAME.router`
@@ -20,7 +22,7 @@ if [[ $DCHP == true ]]; then
             echo "dhcp-host=$MAC,$IP,12h" >> /etc/dnsmasq.d/53-dhcp.conf
         done
     done
-fi
+)
 
 # for each file in templates
 if [[ `ls -A /tmp/templates` ]]; then
@@ -35,7 +37,7 @@ if [[ `ls -A /tmp/templates` ]]; then
         sed -i "s|DNS1|$DNS1|g" /etc/dnsmasq.d/`basename $file`
         sed -i "s|DNS2|$DNS2|g" /etc/dnsmasq.d/`basename $file`
         sed -i "s|REV_CIDR|$REV_CIDR|g" /etc/dnsmasq.d/`basename $file`
-        if [[ $TFTP == true ]]; then
+        [ "$TFTP" == "true" ] && (
             TFTP_ROOT=`yq r /tmp/config.yml tftp.root`
             DOMAIN=`yq r /tmp/config.yml tftp.domain`
             TFTP_HOST=`yq r /tmp/config.yml tftp.host`
@@ -47,7 +49,7 @@ if [[ `ls -A /tmp/templates` ]]; then
             sed -i "s|RANGE_LOW|$RANGE_LOW|g" /etc/dnsmasq.d/`basename $file`
             sed -i "s|RANGE_HIGH|$RANGE_HIGH|g" /etc/dnsmasq.d/`basename $file`
             sed -i "s|TFTP_ROOT|$TFTP_ROOT|g" /etc/dnsmasq.d/`basename $file`
-        fi
+        )
     done
 fi
 
