@@ -8,7 +8,42 @@ on:
   push:
     branches: [master]
 jobs:
-  release:
+  release_arm64:
+    name: Release to docker registry on github.
+    runs-on: [self-hosted, linux, arm64]
+    steps:
+      - uses: actions/checkout@v2
+      # simple build
+      - run: |
+          make build
+      # simple test
+      - run: |
+          make test.dnsmasqpxe
+      # push to docker prime
+      - uses: docker/build-push-action@v1
+        if: success()
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_TOKEN_TRILOM }}
+          repository: trailmix/dnsmasqpxe
+          dockerfile: .docker/Dockerfile
+          tags: arm64
+          labels: arch=arm64
+          tag_with_ref: true
+      # push to github package repo
+      - uses: docker/build-push-action@v1
+        if: success()
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
+          registry: docker.pkg.github.com
+          # github package repo needs last slash for tag
+          repository: trailmix/dnsmasqpxe/latest
+          dockerfile: .docker/Dockerfile
+          tags: arm64
+          labels: arch=arm64
+          tag_with_ref: true
+  release_amd64:
     name: Release to docker registry on github.
     runs-on: ubuntu-latest
     steps:
@@ -27,6 +62,8 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN_TRILOM }}
           repository: trailmix/dnsmasqpxe
           dockerfile: .docker/Dockerfile
+          tags: amd64
+          labels: arch=amd64
           tag_with_ref: true
       # push to github package repo
       - uses: docker/build-push-action@v1
@@ -35,6 +72,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PACKAGE_PUSH_TRILOM_BOT }}
           registry: docker.pkg.github.com
-          repository: trailmix/dnsmasqpxe
+          # github package repo needs last slash for tag
+          repository: trailmix/dnsmasqpxe/latest
           dockerfile: .docker/Dockerfile
+          tags: amd64
+          labels: arch=amd64
           tag_with_ref: true
