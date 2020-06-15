@@ -40,7 +40,7 @@ jobs:
 
           echo ::set-output name=docker_image::${DOCKER_IMAGE}
           echo ::set-output name=version::${VERSION}
-          echo ::set-output name=gh_tags::${GH_TAGS}
+          echo ::set-output name=gh_reg::${GITHUB_REGISTRY}
           echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} \
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
@@ -64,7 +64,7 @@ jobs:
           DOCKER_USERNAME: "trilom-bot"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "${GITHUB_TOKEN}" | docker login https://${GITHUB_REGISTRY} --username ${DOCKER_USERNAME} --password-stdin
+          echo "${GITHUB_TOKEN}" | docker login "https://${{ steps.prepare.outputs.gh_reg }}" --username ${DOCKER_USERNAME} --password-stdin
       - name: Docker Buildx (push) - Docker Prime
         if: success() && github.event_name != 'pull_request'
         run: |
