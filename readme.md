@@ -1,7 +1,8 @@
 # dnsmasqPXE
 
 ![Supports amd64 Architecture][amd64-shield]![Supports armhf Architecture][armhf-shield]![Supports armv7 Architecture][armv7-shield]![Supports aarch64 Architecture][aarch64-shield]  
-![goofus_masqs goofus dnsmasq pxe init matchbox](static/goofus_masqs.png)
+[![goofus_masqs goofus dnsmasq pxe init matchbox](static/goofus_masqs.png)](http://djkittyplayz.art/)
+[![art djkittyplayz][art]](<(http://djkittyplayz.art/)>)
 
 ## use - docker-compose
 
@@ -176,6 +177,7 @@ docker exec -it dnsmasqpxe /bin/bash
 
 - you can alter the port, for example `1000:53/udp` will make the host listen on port 1000 and forward it to 53 on the container.
 
+[art]: https://img.shields.io/badge/art-djkittyplayz-yellow
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
 [armhf-shield]: https://img.shields.io/badge/armhf-yes-green.svg
