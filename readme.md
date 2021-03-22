@@ -3,7 +3,7 @@
 ![Supports amd64 Architecture][amd64-shield]![Supports armhf Architecture][armhf-shield]![Supports armv7 Architecture][armv7-shield]![Supports aarch64 Architecture][aarch64-shield]
 ![Docker Pulls][docker-pulls]![Docker Size][docker-size][![Docker Version][docker-version]](https://hub.docker.com/r/trailmix/dnsmasqpxe/tags)[![Docker Edge][docker-edge]](https://hub.docker.com/r/trailmix/dnsmasqpxe/tags)
 
-[![goofus_masqs goofus dnsmasq pxe init matchbox](static/goofus_masqs.png)](http://djkittyplayz.art/)
+[![goofus_masqs goofus dnsmasq pxe init matchbox](https://trailmix-images.s3.amazonaws.com/gooface/goofus_masqs.png)](http://djkittyplayz.art/)
 [![art djkittyplayz][art]](<(http://djkittyplayz.art/)>)
 
 ## use - docker-compose
